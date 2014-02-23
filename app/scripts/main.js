@@ -13,13 +13,14 @@ var socket = io.connect('http://'+location.hostname+':3000');
 
     function updateProperties() {
         socket.emit('timestamp', {
-            timestamp: document._video.currentTime
+            timestamp: document._video.currentTime,
+            duration: document._video.duration
         });
     }
 
     function playVideo() {
         document._video.volume = 0;
-        // document._video.play();
+        document._video.play();
     }
 
     function toggleVideo() {
@@ -29,54 +30,6 @@ var socket = io.connect('http://'+location.hostname+':3000');
             document._video.pause();
         }
     }
-
-    // function connectSocket() {
-    //     var socket = io('http://localhost');
-    //     socket.on('connect', function() {
-    //         socket.on('event', function(data) {});
-    //         socket.on('disconnect', function() {});
-    //     });
-
-    // }
-
-
-
-    // socket.on('news', function(data) {
-    //     console.log(data);
-    //     socket.emit('toggle', {
-    //         socket: 1
-    //     });
-    // });
-
-
-    // socket.on('initialState', function(data) {
-    //     $.each(data, function(index) {
-    //         if (data[index].state) {
-    //             $('[data-socket-id=' + data[index].socket + ']').addClass('active');
-    //         } else {
-    //             $('[data-socket-id=' + data[index].socket + ']').removeClass('active');
-    //         }
-    //     });
-    // });
-
-    // socket.on('updateSocket', function(data) {
-    //     console.log(data);
-    //     console.log($('[data-socket-id=' + data.socket + ']')[0]);
-    //     if (data.state) {
-    //         $('[data-socket-id=' + data.socket + ']').addClass('active');
-    //     } else {
-    //         $('[data-socket-id=' + data.socket + ']').removeClass('active');
-    //     }
-    // });
-
-    // $(document).ready(function() {
-    //     $('.list-group-item').on('click', function(event) {
-    //         event.preventDefault();
-    //         socket.emit('toggle', {
-    //             socket: $(this).data('socket-id')
-    //         });
-    //     });
-    // });
 
 
     getCountdown();
@@ -93,7 +46,8 @@ var socket = io.connect('http://'+location.hostname+':3000');
 
     if (document._countdown) {
         socket.on('updateTimestamp', function(data) {
-            $(document._countdown).text(data.timestamp.timestamp + " sec");
+            var timeLeft = Math.floor(data.timestamp.timestamp - data.timestamp.duration) * -1;
+            $(document._countdown).text( timeLeft + " sec");
         });
 
         $(document._countdown).click(function(event) {

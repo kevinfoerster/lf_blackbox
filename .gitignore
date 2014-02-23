@@ -14,3 +14,7 @@ results
 
 npm-debug.log
 node_modules
+.tmp
+.sass-cache
+app/bower_components
+test/bower_components
